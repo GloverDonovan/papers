@@ -1,0 +1,53 @@
+\documentclass{article}
+
+% Packages ======================================
+
+\usepackage{microtype}  % Make text spacing look a lot better
+\usepackage{amsthm}     % "Theorem", "Definition", and other blocks
+\usepackage{kpfonts}    % The font of choice
+\usepackage{hyperref}   % Link support
+
+% Package-specific settings =====================
+
+\hypersetup{colorlinks=true}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+
+% Document settings =============================
+
+\title{Mica: A Specification}
+\author{Donovan Glover}
+\date{\today}
+
+\begin{document}
+
+    % ===========================================
+    % Title Page & Table of Contents
+    % ===========================================
+
+	\maketitle
+    \tableofcontents
+
+    \newpage
+
+    % ===========================================
+    % Overview
+    % ===========================================
+
+    \section{Overview}
+
+    \textbf{Mica} is \emph{a universal way to change color schemes.} It is written in the \href{https://crystal-lang.org}{Crystal programming language} and strives to \textbf{do one thing and do it well:} change color schemes.
+
+    \newpage
+
+    % ===========================================
+    % Definitions
+    % ===========================================
+
+    \section{Definitions}
+
+    \begin{definition}
+        We define a \emph{color scheme} to be a set of 16 colors used as part of the operating system.
+    \end{definition}
+
+\end{document}
