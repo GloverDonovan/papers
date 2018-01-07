@@ -14,7 +14,11 @@
 
 # This is a test case to make sure that everything works.
 # It uses out/ instead of .tex/
-Hello.pdf: Hello/main.tex
-	mkdir -p Hello/out
-	pdflatex -output-directory Hello/out Hello/main.tex
-	mv Hello/out/main.pdf Hello.pdf
+
+paper := Mica
+
+bin/${paper}.pdf: ${paper}/main.tex
+	mkdir -p ${paper}/.tex
+	pdflatex -output-directory ${paper}/.tex ${paper}/main.tex
+	mkdir -p bin
+	cp ${paper}/.tex/main.pdf bin/${paper}.pdf
