@@ -6,12 +6,17 @@
 \usepackage{amsthm}     % "Theorem", "Definition", and other blocks
 \usepackage{kpfonts}    % The font of choice
 \usepackage{hyperref}   % Link support
+\usepackage[dvipsnames]{xcolor} % Color support
 
 % Package-specific settings =====================
 
 \hypersetup{colorlinks=true}
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}
+
+% Custom Commands ===============================
+
+\DeclareTextFontCommand{\df}{\bfseries\color{Mahogany}}
 
 % Document settings =============================
 
@@ -25,7 +30,7 @@
     % Title Page & Table of Contents
     % ===========================================
 
-	\maketitle
+    \maketitle
     \tableofcontents
 
     \newpage
@@ -38,6 +43,80 @@
 
     \textbf{Mica} is \emph{a universal way to change color schemes.} It is written in the \href{https://crystal-lang.org}{Crystal programming language} and strives to \textbf{do one thing and do it well:} change color schemes.
 
+    Because Mica does one thing and does it well, it can easily be used with tools like \texttt{pywal} and specifications like \href{https://github.com/chriskempson/base16}{Base16}. Mica is \emph{not} in charge of making actual color schemes. It simply applies the color schemes you give it to all the programs you specify.
+
+    \newpage
+
+    % ===========================================
+    % Rationale
+    % ===========================================
+
+    \section{Rationale}
+
+    Changing color schemes should be trivial. Traditionally, each piece of software has its own way of handling colors. As a user, you have to change the colors of each piece of software individually.
+
+    Mica solves this problem. Mica \textbf{does one thing and does it well}. Mica focuses on one thing and one thing only: changing the color schemes of various software. This allows Mica to be \emph{\textbf{really good}} at what it does, and for supporting programs to be \emph{\textbf{really good}} at what they do.
+
+    \newpage
+
+    % ===========================================
+    % Design Goals
+    % ===========================================
+
+    \section{Design Goals}
+
+    Mica aims to be easily understood and easily extensible. The code base should be trivial to understand and improve upon. Additionally, it should be trivial to fine tune your preferred settings without having to alter the source code.
+
+    %We can abstract these concepts into general rules. By definition, Mica must
+
+    \subsection{Color Schemes}
+
+    Color schemes \textbf{must} be easily applied. Therefore, we define the \texttt{ColorScheme} class. Using a class for color schemes allow us to abstract \emph{how} we form these color schemes away from other parts of the program. More specifically, Mica interacts with objects of the \texttt{ColorScheme} class. Mica does not need to know how these color schemes were made, only that they exist and are color schemes.
+
+    This has a lot of implications. Firstly, other parts of Mica can focus on working with \df{color schemes} and not YAML, JSON, or other formats that the \texttt{ColorScheme} class accepts. Secondly, with the \texttt{ColorScheme} class it becomes trivial to add new instantiation methods so that Mica supports more color scheme formats.
+
+    \subsection{Software}
+
+    Support for new software \textbf{must} be able to be added in trivial time.
+
+    \subsubsection{Variations of the Same Software}
+
+    Some software may have multiple ways of applying the same color scheme. Additionally, some software may rely on changing a configuration file whilst other software rely on a specific file (such as \texttt{Xresources}), which is shared by a variety of different software.
+
+    In order to change color schemes, a software may
+
+    \begin{enumerate}
+        \item Require a software configuration file to be modified
+        \item Require a configuration file used by various software to be modified
+        \item Require a command to be sent to it
+        \item Require a string of special codes sent to it
+        \item Require a restart of the software in question
+        \item Require a restart of a different software
+    \end{enumerate}
+
+    \subsection{Customization}
+
+    % Itemize / Enumerate / Description with [Text]
+    %\begin{itemize}
+    %    \item ...
+    %\end{itemize}
+
+    \newpage
+
+    % ===========================================
+    % Non-Goals
+    % ===========================================
+
+    \section{Non-Goals}
+
+    \begin{enumerate}
+        \item Mica is \emph{\textbf{not}} a ``temporary'' color scheme changer. It simply applies the color schemes you give it to all the programs you specify.
+        \item Mica is \emph{\textbf{not}} in charge of saving your color schemes. Mica is meant to be scripted with. You should make your own scripts that automate the usage of Mica. For inspiration, see the examples section.
+        \item Mica is \emph{\textbf{not}} in charge of changing your desktop background. There are better programs out there, such as \texttt{feh}, that do exactly what you want. This lets you set your desktop background the way you want instead of depending on Mica to have the functionality you're looking for.
+        \item Mica is \emph{\textbf{not}} a color scheme generator. It does not create color schemes from images or other media. Again, there are better programs such as \texttt{pywal} that do the job better and can work with Mica. Simply pass the generated \texttt{pywal} color scheme to Mica, and Mica will handle it as a regular color scheme.
+        \item Mica is \emph{\textbf{not}} in charge of changing your image files or other media. Mica changes \emph{color schemes}. It is up to your scripts to change any images you use as needed.
+    \end{enumerate}
+
     \newpage
 
     % ===========================================
@@ -47,7 +126,39 @@
     \section{Definitions}
 
     \begin{definition}
-        We define a \emph{color scheme} to be a set of 16 colors used as part of the operating system.
+        A \df{color} is defined to be any RGB color \texttt{\#rrggbb} used as part of a color scheme.
     \end{definition}
+
+    \begin{definition}
+        A \df{color scheme} is a set of 16 colors used as part of the operating system, with each color being usually unique.
+    \end{definition}
+
+    \begin{definition}
+        A \df{theme} is a combination of desktop background, font choice, and other unique characteristics used with the color scheme.
+    \end{definition}
+
+    \newpage
+
+    % ===========================================
+    % Implementation
+    % ===========================================
+
+    \section{Implementation}
+
+    \newpage
+
+    % ===========================================
+    % Extensibility
+    % ===========================================
+
+    \section{Extensibility}
+
+    \newpage
+
+    % ===========================================
+    % FAQ
+    % ===========================================
+
+    \section{Frequently Asked Questions}
 
 \end{document}
