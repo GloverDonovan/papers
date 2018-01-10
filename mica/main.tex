@@ -1,3 +1,6 @@
+% Mica: A Specification
+% Copyright (C) 2017-2018 Donovan Glover
+
 \documentclass{article}
 
 % Packages ======================================
@@ -5,24 +8,45 @@
 \usepackage{microtype}  % Make text spacing look a lot better
 \usepackage{amsthm}     % "Theorem", "Definition", and other blocks
 \usepackage{kpfonts}    % The font of choice
-\usepackage{hyperref}   % Link support
+\usepackage{hyperref}  % Link support
 \usepackage[dvipsnames]{xcolor} % Color support
+\usepackage{draftwatermark}     % Watermark
 
 % Package-specific settings =====================
 
-\hypersetup{colorlinks=true}
+% Add color to links and remove some pdf metadata
+\hypersetup{colorlinks=true,
+            allcolors=Plum,
+            linkcolor=CadetBlue,
+            pdfinfo={Creator={},Producer={}}
+}
+
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}
 
+\SetWatermarkText{DRAFT}
+\SetWatermarkScale{1}
+\SetWatermarkLightness{0.95}
+
 % Custom Commands ===============================
 
-\DeclareTextFontCommand{\df}{\bfseries\color{Mahogany}}
+\DeclareTextFontCommand{\df}{\bfseries\color{WildStrawberry}}
 
 % Document settings =============================
 
 \title{Mica: A Specification}
 \author{Donovan Glover}
-\date{\today}
+\date{January 9, 2018}
+
+% Remove more variate metadata from the output pdf file
+% You should now be able to make this pdf yourself and verify
+% that any pdfs you have actually came from this source
+% https://reproducible-builds.org/
+\pdfinfoomitdate=1
+\pdftrailerid{}
+\pdfsuppressptexinfo=-1
+
+\renewcommand{\baselinestretch}{1.1}
 
 \begin{document}
 
@@ -43,9 +67,7 @@
 
     \textbf{Mica} is \emph{a universal way to change color schemes.} It is written in the \href{https://crystal-lang.org}{Crystal programming language} and strives to \textbf{do one thing and do it well:} change color schemes.
 
-    Because Mica does one thing and does it well, it can easily be used with tools like \texttt{pywal} and specifications like \href{https://github.com/chriskempson/base16}{Base16}. Mica is \emph{not} in charge of making actual color schemes. It simply applies the color schemes you give it to all the programs you specify.
-
-    \newpage
+    Because Mica does one thing and does it well, it can easily be used with tools like \texttt{\href{https://github.com/dylanaraps/pywal}{pywal}} and specifications like \href{https://github.com/chriskempson/base16}{Base16}. Mica is \emph{not} in charge of making the actual color schemes. It simply applies the color schemes you give it to all the programs you specify.
 
     % ===========================================
     % Rationale
@@ -53,9 +75,17 @@
 
     \section{Rationale}
 
-    Changing color schemes should be trivial. Traditionally, each piece of software has its own way of handling colors. As a user, you have to change the colors of each piece of software individually.
+    Changing color schemes should be easy. Traditionally, every piece of software on your computer has its own way of handling colors. As a user, you have to change config files and other settings for each piece of software individually.
 
-    Mica solves this problem. Mica \textbf{does one thing and does it well}. Mica focuses on one thing and one thing only: changing the color schemes of various software. This allows Mica to be \emph{\textbf{really good}} at what it does, and for supporting programs to be \emph{\textbf{really good}} at what they do.
+    Mica solves this problem by focusing on one thing and one thing only: changing the color schemes of various software. This allows Mica to be \emph{\textbf{really good}} at what it does, and for other programs to be \emph{\textbf{really good}} at what they do.
+
+    % These are just placeholder sections so I can see how things look
+
+    \subsection{Changing color schemes is difficult}
+
+    \subsection{Many programs exist}
+
+    \subsection{Reinventing the wheel is nontrivial}
 
     \newpage
 
@@ -67,11 +97,9 @@
 
     Mica aims to be easily understood and easily extensible. The code base should be trivial to understand and improve upon. Additionally, it should be trivial to fine tune your preferred settings without having to alter the source code.
 
-    %We can abstract these concepts into general rules. By definition, Mica must
+    \subsection{Color schemes}
 
-    \subsection{Color Schemes}
-
-    Color schemes \textbf{must} be easily applied. Therefore, we define the \texttt{ColorScheme} class. Using a class for color schemes allow us to abstract \emph{how} we form these color schemes away from other parts of the program. More specifically, Mica interacts with objects of the \texttt{ColorScheme} class. Mica does not need to know how these color schemes were made, only that they exist and are color schemes.
+    Color schemes \textbf{must} be easily applied. Therefore, we define the \texttt{ColorScheme} class. Using a class for color schemes allows us to abstract \emph{how} we form these color schemes away from other parts of the program. More specifically, Mica interacts with objects of the \texttt{ColorScheme} class. Mica does not need to know how these color schemes were made, only that they exist and are color schemes.
 
     This has a lot of implications. Firstly, other parts of Mica can focus on working with \df{color schemes} and not YAML, JSON, or other formats that the \texttt{ColorScheme} class accepts. Secondly, with the \texttt{ColorScheme} class it becomes trivial to add new instantiation methods so that Mica supports more color scheme formats.
 
@@ -79,7 +107,7 @@
 
     Support for new software \textbf{must} be able to be added in trivial time.
 
-    \subsubsection{Variations of the Same Software}
+    \subsubsection{Variations of the same software}
 
     Some software may have multiple ways of applying the same color scheme. Additionally, some software may rely on changing a configuration file whilst other software rely on a specific file (such as \texttt{Xresources}), which is shared by a variety of different software.
 
@@ -96,11 +124,6 @@
 
     \subsection{Customization}
 
-    % Itemize / Enumerate / Description with [Text]
-    %\begin{itemize}
-    %    \item ...
-    %\end{itemize}
-
     \newpage
 
     % ===========================================
@@ -109,12 +132,14 @@
 
     \section{Non-Goals}
 
+    \subsection{What Mica is not}
+
     \begin{enumerate}
-        \item Mica is \emph{\textbf{not}} a ``temporary'' color scheme changer. It simply applies the color schemes you give it to all the programs you specify.
-        \item Mica is \emph{\textbf{not}} in charge of saving your color schemes. Mica is meant to be scripted with. You should make your own scripts that automate the usage of Mica. For inspiration, see the examples section.
-        \item Mica is \emph{\textbf{not}} in charge of changing your desktop background. There are better programs out there, such as \texttt{feh}, that do exactly what you want. This lets you set your desktop background the way you want instead of depending on Mica to have the functionality you're looking for.
-        \item Mica is \emph{\textbf{not}} a color scheme generator. It does not create color schemes from images or other media. Again, there are better programs such as \texttt{pywal} that do the job better and can work with Mica. Simply pass the generated \texttt{pywal} color scheme to Mica, and Mica will handle it as a regular color scheme.
-        \item Mica is \emph{\textbf{not}} in charge of changing your image files or other media. Mica changes \emph{color schemes}. It is up to your scripts to change any images you use as needed.
+        \item Mica is \emph{\df{not}} a ``temporary'' color scheme changer. It simply applies the color schemes you give it to all the programs you specify.
+        \item Mica is \emph{\df{not}} in charge of saving your color schemes. Mica is meant to be scripted with. You should make your own scripts that automate the usage of Mica. For inspiration, see the examples section.
+        \item Mica is \emph{\df{not}} in charge of changing your desktop background. There are better programs out there, such as \texttt{feh}, that do exactly what you want. This lets you set your desktop background the way you want instead of depending on Mica to have the functionality you're looking for.
+        \item Mica is \emph{\df{not}} a color scheme generator. It does not create color schemes from images or other media. Again, there are better programs such as \texttt{pywal} that do the job better and can work with Mica. Simply pass the generated \texttt{pywal} color scheme to Mica, and Mica will handle it as a regular color scheme.
+        \item Mica is \emph{\df{not}} in charge of changing your image files or other media. Mica changes \emph{color schemes}. It is up to your scripts to change any images you use as needed.
     \end{enumerate}
 
     \newpage
@@ -125,16 +150,28 @@
 
     \section{Definitions}
 
+    \subsection{Preliminary definitions}
+
     \begin{definition}
-        A \df{color} is defined to be any RGB color \texttt{\#rrggbb} used as part of a color scheme.
+        A \df{user} refers to any agent using the Mica software.
     \end{definition}
 
     \begin{definition}
-        A \df{color scheme} is a set of 16 colors used as part of the operating system, with each color being usually unique.
+        An \df{operating system} is the collection of software and configuration files that a user interacts with when using their computer.
+    \end{definition}
+
+    \subsection{Colors and color schemes}
+
+    \begin{definition}
+        A \df{color} is any RGB color \texttt{\#rrggbb} used as part of a color scheme.
     \end{definition}
 
     \begin{definition}
-        A \df{theme} is a combination of desktop background, font choice, and other unique characteristics used with the color scheme.
+        A \df{color scheme} is a set of 16 colors used as part of the operating system. Each color is usually unique.
+    \end{definition}
+
+    \begin{definition}
+        A \df{theme} is the combination of color scheme, desktop background, font choice, and other design choices made for the operating system.
     \end{definition}
 
     \newpage
@@ -145,20 +182,22 @@
 
     \section{Implementation}
 
+    \subsection{The \textbf{Color} class}
+
+    \subsection{The \textbf{ColorScheme} class}
+
+    \subsection{The \textbf{Printer} class}
+
+    % I haven't decided on the name of this class yet, but Atom comes to mind
+    \subsection{The \textbf{Atom} class}
+
     \newpage
 
-    % ===========================================
-    % Extensibility
-    % ===========================================
+    % More filler sections, but I wouldn't mind a final
+    % section to tie things together; ideally it should go
+    % over how Mica is expected to evolve with time
+    \section{Continuality}
 
-    \section{Extensibility}
-
-    \newpage
-
-    % ===========================================
-    % FAQ
-    % ===========================================
-
-    \section{Frequently Asked Questions}
+    \subsection{Putting it all together}
 
 \end{document}
