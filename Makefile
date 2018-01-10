@@ -5,20 +5,28 @@
 #
 # The end result looks something like this:
 #
-# - Paper1/ (Source files)
+# - paper-name/ (Source files)
 #   - main.tex
 #   - .tex/ (Intermediary files)
 #   	- main.aux
 #   	- main.log
-# - Paper1.pdf (Output files)
+# - bin/ (Output files)
+#   	- paper-name.pdf
+#
+# I also wrote some specifications (in spec/) to make sure
+# that my papers have what I expect them to have. Check it out!
 
-# This is a test case to make sure that everything works.
-# It uses out/ instead of .tex/
+paper := mica
 
-paper := Mica
+bin/${paper}.pdf: ${paper}/main.tex spec/tex/${paper}.cr spec/pdf/${paper}.cr
+	@# Make sure that the .tex file is good to go
+	crystal spec spec/tex/${paper}.cr
 
-bin/${paper}.pdf: ${paper}/main.tex
+	@# Once those tests pass, build the actual paper
 	mkdir -p ${paper}/.tex
 	pdflatex -output-directory ${paper}/.tex ${paper}/main.tex
 	mkdir -p bin
 	cp ${paper}/.tex/main.pdf bin/${paper}.pdf
+
+	@# Ensure that the output pdf is what we'd expect
+	crystal spec spec/pdf/${paper}.cr
